@@ -1,14 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MinLength } from 'class-validator';
+
+export class ChangePasswordDto {
+  @ApiProperty({ description: 'The current password of the user' })
+  @IsString()
+  currentPassword: string;
+
+  @ApiProperty({ description: 'The new password for the user' })
+  @IsString()
+  @MinLength(8)
+  newPassword: string;
+}
 
 export class LoginDto {
   @ApiProperty({
-    example: 'user@example.com',
+    example: 'user1@example.com',
     description: 'The email of the user',
   })
   email: string;
 
   @ApiProperty({
-    example: 'password123',
+    example: '12345678',
     description: 'The password of the user',
   })
   password: string;
@@ -16,13 +28,13 @@ export class LoginDto {
 
 export class RegisterDto {
   @ApiProperty({
-    example: 'user@example.com',
+    example: 'user1@example.com',
     description: 'The email of the user',
   })
   email: string;
 
   @ApiProperty({
-    example: 'password123',
+    example: '12345678',
     description: 'The password of the user',
   })
   password: string;
