@@ -12,6 +12,53 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  articles  Article[]
+  comments  Comment[]
+}
+
+model Article {
+  id         Int        @id @default(autoincrement())
+  title      String
+  content    String
+  published  Boolean    @default(false)
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
+  category   Category   @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  tags       Tag[]
+  comments   Comment[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  articles Article[]
+}
+
+model Tag {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  articles Article[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId Int
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
 }

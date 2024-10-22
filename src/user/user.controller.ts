@@ -11,22 +11,29 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
-  ApiQuery,
 } from '@nestjs/swagger';
-import { Prisma, User } from '@prisma/client';
-import { GetUsersQueryDto } from './user.dto';
+import { Prisma, User, Role } from '@prisma/client';
+import { GetUsersQueryDto } from './dto/user.dto';
+import { AclService } from '../acl/acl.service';
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly aclService: AclService,
+  ) {}
 
   @Post()
+  @Roles(Role.ADMIN, Role.EDITOR, Role.USER)
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({
     status: 201,
@@ -38,12 +45,11 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
+  @Roles(Role.ADMIN, Role.EDITOR, Role.USER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Return all users.' })
-  async getAllUsers(
-    @Query() query: GetUsersQueryDto,
-  ): Promise<{
+  async getAllUsers(@Query() query: GetUsersQueryDto): Promise<{
     users: Omit<User, 'password'>[];
     total: number;
     page: number;
@@ -73,6 +79,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @Roles(Role.ADMIN, Role.EDITOR, Role.USER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a user by id' })
   @ApiResponse({ status: 200, description: 'Return the user.' })
@@ -83,6 +90,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.EDITOR)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
@@ -102,6 +110,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a user' })
   @ApiResponse({
