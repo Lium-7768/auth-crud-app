@@ -5,6 +5,8 @@ import {
   Patch,
   UseGuards,
   Body,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -30,6 +32,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'User login' })
   @ApiBody({ type: LoginDto })
   @ApiResponse({
@@ -42,6 +45,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Register new user' })
   @ApiBody({ type: RegisterDto })
   @ApiResponse({
@@ -56,6 +60,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('change-password')
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Change user password' })
   @ApiBody({ type: ChangePasswordDto })

@@ -6,6 +6,8 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AclModule } from './acl/acl.module';
 import { ContentModule } from './content/content.module';
+import { NotificationModule } from './notification/notification.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { ContentModule } from './content/content.module';
     AuthModule,
     AclModule,
     ContentModule,
+    NotificationModule,
+    MediaModule,
   ],
   providers: [PrismaService],
 })

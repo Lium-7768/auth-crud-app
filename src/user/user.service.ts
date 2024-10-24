@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { MediaService } from '../media/media.service';
 import { User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private mediaService: MediaService,
+  ) {}
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -30,14 +34,6 @@ export class UserService {
         cursor,
         where,
         orderBy,
-        select: {
-          id: true,
-          email: true,
-          role: true,
-          createdAt: true,
-          updatedAt: true,
-          password: false,
-        },
       }),
       this.prisma.user.count({ where }),
     ]);
@@ -72,6 +68,23 @@ export class UserService {
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
       where,
+    });
+  }
+
+  async uploadAvatar(
+    userId: number,
+    file: Express.Multer.File,
+  ): Promise<Omit<User, 'password'>> {
+    const uploadedFile = await this.mediaService.uploadFile(
+      file,
+      '1dfvxaBzly84KrJgEskJFcQz_kXxVR4aQ',
+    );
+
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        avatarUrl: uploadedFile.url,
+      },
     });
   }
 }

@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Article, Category, Tag, Comment, Prisma } from '@prisma/client';
+import { MediaService } from '../media/media.service';
 
 @Injectable()
 export class ContentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private mediaService: MediaService,
+  ) {}
 
   async createArticle(data: Prisma.ArticleCreateInput): Promise<Article> {
     // Check if the category exists
@@ -117,5 +121,13 @@ export class ContentService {
       where: { articleId },
       include: { author: true },
     });
+  }
+
+  async uploadImage(file: Express.Multer.File): Promise<string> {
+    const uploadedFile = await this.mediaService.uploadFile(
+      file,
+      '1dfvxaBzly84KrJgEskJFcQz_kXxVR4aQ',
+    );
+    return uploadedFile.url;
   }
 }

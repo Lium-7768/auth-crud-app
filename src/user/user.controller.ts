@@ -8,7 +8,11 @@ import {
   Delete,
   UseGuards,
   Query,
+  UseInterceptors,
+  UploadedFile,
+  Request,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -18,19 +22,18 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 import { Prisma, User, Role } from '@prisma/client';
 import { GetUsersQueryDto } from './dto/user.dto';
-import { AclService } from '../acl/acl.service';
+import { FileUploadDto } from '../media/dto/file-upload.dto';
 
 @ApiTags('users')
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly aclService: AclService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   @Roles(Role.ADMIN, Role.EDITOR, Role.USER)
@@ -120,5 +123,19 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found.' })
   async deleteUser(@Param('id') id: string): Promise<User> {
     return this.userService.deleteUser({ id: Number(id) });
+  }
+
+  @Post('avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload user avatar' })
+  @ApiResponse({ status: 200, description: 'Avatar uploaded successfully.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: FileUploadDto })
+  async uploadAvatar(
+    @Request() req,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.userService.uploadAvatar(req.user.userId, file);
   }
 }

@@ -12,7 +12,10 @@ import {
   InternalServerErrorException,
   ForbiddenException,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ContentService } from './content.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -23,6 +26,8 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiQuery,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 import { Article, Category, Tag, Comment, Role } from '@prisma/client';
 import {
@@ -32,6 +37,7 @@ import {
   CreateTagDto,
   CreateCommentDto,
 } from './dto/content.dto';
+import { FileUploadDto } from '../media/dto/file-upload.dto';
 
 @ApiTags('content')
 @Controller('content')
@@ -217,5 +223,17 @@ export class ContentController {
   })
   async getComments(@Param('id') id: string): Promise<Comment[]> {
     return this.contentService.getComments(Number(id));
+  }
+
+  @Post('upload-image')
+  @Roles(Role.ADMIN, Role.EDITOR)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload an image' })
+  @ApiResponse({ status: 200, description: 'Image uploaded successfully.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: FileUploadDto })
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    return this.contentService.uploadImage(file);
   }
 }

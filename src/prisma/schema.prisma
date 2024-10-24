@@ -8,6 +8,16 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Notification {
+  id        Int      @id @default(autoincrement())
+  type      String   // 'COMMENT' or 'SYSTEM'
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
@@ -17,6 +27,8 @@ model User {
   updatedAt DateTime @updatedAt
   articles  Article[]
   comments  Comment[]
+  notifications Notification[]
+  avatarUrl String?
 }
 
 model Article {
@@ -32,6 +44,7 @@ model Article {
   comments   Comment[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
+  imageUrl   String?
 }
 
 model Category {
