@@ -8,7 +8,7 @@ export class MediaService {
   private drive: any;
 
   constructor(private configService: ConfigService) {
-    const base64Credentials = this.configService.get<string>('GOOGLE_APPLICATION_CREDENTIALS')
+    const base64Credentials = process.env.GOOGLE_APPLICATION_CREDENTIALS;
     const credentials = JSON.parse(Buffer.from(base64Credentials, 'base64').toString('utf-8'));
 
     const auth = new google.auth.JWT({

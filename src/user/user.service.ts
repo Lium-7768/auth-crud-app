@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MediaService } from '../media/media.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma } from '../prisma/generated/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

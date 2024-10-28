@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
+import { Role } from '../prisma/generated/client';
 import {
   CreateSystemAnnouncementDto,
   UpdateNotificationDto,

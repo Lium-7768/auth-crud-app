@@ -29,7 +29,7 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
-import { Article, Category, Tag, Comment, Role } from '@prisma/client';
+import { Article, Category, Tag, Comment, Role } from '../prisma/generated/client';
 import {
   CreateArticleDto,
   UpdateArticleDto,

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Article, Category, Tag, Comment, Prisma } from '@prisma/client';
+import { Article, Category, Tag, Comment, Prisma } from '../prisma/generated/client';
 import { MediaService } from '../media/media.service';
 
 @Injectable()
