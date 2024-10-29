@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "vercel-build": "pnpm run prisma:migrate && pnpm run prisma:generate && nest build && cp -r src/prisma/generated/ dist/prisma/",
+    "vercel-build": "pnpm run prisma:migrate && pnpm run prisma:generate && nest build",
     "build": "pnpm run prisma:migrate && pnpm run prisma:generate && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

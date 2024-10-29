@@ -8,6 +8,8 @@ import { AclModule } from './acl/acl.module';
 import { ContentModule } from './content/content.module';
 import { NotificationModule } from './notification/notification.module';
 import { MediaModule } from './media/media.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { MediaModule } from './media/media.module';
     NotificationModule,
     MediaModule,
   ],
-  providers: [PrismaService],
+  controllers: [AppController],
+  providers: [PrismaService, AppService],
 })
 export class AppModule {}

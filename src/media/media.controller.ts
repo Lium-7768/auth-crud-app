@@ -21,7 +21,7 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
-import { Role } from '../prisma/generated/client';
+import { Role } from 'src/prisma/generated/client';
 import { FileUploadDto } from './dto/file-upload.dto';
 
 @ApiTags('media')

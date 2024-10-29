@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from '../prisma/generated/client';
+import { Role } from 'src/prisma/generated/client';
 
 @Injectable()
 export class AclService {

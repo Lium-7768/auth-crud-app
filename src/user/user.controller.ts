@@ -25,7 +25,7 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
-import { Prisma, User, Role } from '../prisma/generated/client';
+import { Prisma, User, Role } from 'src/prisma/generated/client';
 import { GetUsersQueryDto } from './dto/user.dto';
 import { FileUploadDto } from '../media/dto/file-upload.dto';
 

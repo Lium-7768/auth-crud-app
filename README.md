@@ -92,3 +92,13 @@ vercel login
 pnpm run vercel-build
 vercel --prod
 ```
+
+## Example 🌰
+```bash
+curl --location 'https://auth-crud-app.vercel.app/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "user@example.com",
+    "password": "12345678"
+}'
+```

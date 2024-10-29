@@ -22,7 +22,7 @@ import {
   RegisterDto,
   TokenResponseDto,
   ChangePasswordDto,
-} from './auth.dto';
+} from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('auth')
