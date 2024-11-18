@@ -138,6 +138,7 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  lastLogin: 'lastLogin',
   avatarUrl: 'avatarUrl'
 };
 
