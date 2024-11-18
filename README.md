@@ -102,3 +102,7 @@ curl --location 'https://auth-crud-app.vercel.app/auth/login' \
     "password": "12345678"
 }'
 ```
+
+## Swagger
+
+[https://auth-crud-app.vercel.app/api](https://auth-crud-app.vercel.app/api)
